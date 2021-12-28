@@ -3,6 +3,7 @@ import * as express from 'express';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import container from './config/ioc.container';
 import './controller/home.controller';
+import './controller/board.controller';
 
 const server = new InversifyExpressServer(container);
 
