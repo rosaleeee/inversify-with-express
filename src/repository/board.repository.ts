@@ -9,7 +9,7 @@ import BoardRepositoryInterface from './board.repository.interface';
 
 @injectable()
 class BoardRepository extends BaseMysqlRepository implements BoardRepositoryInterface {
-  constructor(@inject(TYPES.mysqlPool) private mysqlPool: DBConnecitonFactory) {
+  constructor(@inject(TYPES.mysqlPool) protected mysqlPool: DBConnecitonFactory) {
     super(mysqlPool);
   }
 
