@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { inject } from 'inversify';
-import { controller, httpPost, request, response } from 'inversify-express-utils';
+import { controller, httpGet, httpPost, request, response } from 'inversify-express-utils';
 import TYPES from '../constant/types';
 import { RequestCreateBoard } from '../models/board.model';
 import BoardService from '../services/board.service';
@@ -13,6 +13,12 @@ class BoardController {
   public async createBoard(@request() req: express.Request, @response() res: express.Response) {
     const newPost: RequestCreateBoard = req.body;
     return await this.boardService.createBoard(newPost);
+  }
+
+  @httpGet('/:boardId')
+  public async getBoard(@request() req: express.Request, @response() res: express.Response) {
+    const boardId: number = Number(req.params.boardId);
+    return await this.boardService.getBoard(boardId);
   }
 }
 

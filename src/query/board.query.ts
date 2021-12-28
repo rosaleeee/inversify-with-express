@@ -2,6 +2,7 @@ import { QueryInfo } from '../models/transaction.model';
 
 export enum BoardQueryId {
   createBoard,
+  getBoard,
 }
 
 export const BoardQuery = (queryId: BoardQueryId, request?: any): QueryInfo => {
@@ -24,6 +25,17 @@ export const BoardQuery = (queryId: BoardQueryId, request?: any): QueryInfo => {
       `);
       queryParams.push(request.title, request.content);
       break;
+
+    case BoardQueryId.getBoard:
+      query.push(`
+        SELECT
+          board_no AS id,
+          board_title AS title,
+          board_content AS content
+        FROM board b
+        WHERE board_no = ?
+      `);
+      queryParams.push(request);
 
     default:
       break;
