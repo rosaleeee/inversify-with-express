@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import TYPES from '../constant/types';
-import { RequestCreateBoard } from '../models/board.model';
+import { RequestCreateBoard, RequestGetBoards } from '../models/board.model';
 import { QueryInfo } from '../models/transaction.model';
 import { BoardQuery, BoardQueryId } from '../query/board.query';
 import DBConnecitonFactory from '../utils/dbConnectionFactory.util';
@@ -27,6 +27,11 @@ class BoardRepository extends BaseMysqlRepository implements BoardRepositoryInte
       result = rows[0];
     }
     return result;
+  }
+
+  public async getBoards<T>(request: RequestGetBoards, connection?: any): Promise<T[]> {
+    const queryInfo: QueryInfo = BoardQuery(BoardQueryId.getBoards, request);
+    return await this.query<T>(queryInfo.query, queryInfo.queryParams, connection);
   }
 }
 

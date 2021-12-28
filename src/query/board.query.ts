@@ -3,6 +3,7 @@ import { QueryInfo } from '../models/transaction.model';
 export enum BoardQueryId {
   createBoard,
   getBoard,
+  getBoards,
 }
 
 export const BoardQuery = (queryId: BoardQueryId, request?: any): QueryInfo => {
@@ -36,6 +37,35 @@ export const BoardQuery = (queryId: BoardQueryId, request?: any): QueryInfo => {
         WHERE board_no = ?
       `);
       queryParams.push(request);
+
+    case BoardQueryId.getBoards:
+      query.push(`
+        SELECT
+          b.board_no AS id,
+          b.board_title AS title,
+          b.board_content AS content
+        FROM board b
+        WHERE TRUE
+      `);
+      if (request.keyword && request.searchType) {
+        switch (request.searchType) {
+          case 'title':
+            query.push(` AND INSTR(b.board_title, ?) > 0 `);
+            queryParams.push(request.keyword);
+            break;
+          case 'content':
+            query.push(` AND INSTR(b.board_content, ?) > 0 `);
+            queryParams.push(request.keyword);
+            break;
+          case 'title_content':
+            query.push(` AND INSTR(b.board_title, ?) > 0 OR INSTR(b.board_content, ?) > 0 `);
+            queryParams.push(request.keyword, request.keyword);
+            break;
+          default:
+            break;
+        }
+      }
+      break;
 
     default:
       break;
