@@ -16,7 +16,8 @@ class BaseMysqlRepository {
         connection = await this.mysql.getConnection();
       }
 
-      result = await connection.query(queryStr, queryParams);
+      const [rows, fields] = await connection.query(queryStr, queryParams);
+      result = rows as T;
       if (!conn) {
         await connection.commit();
       }
