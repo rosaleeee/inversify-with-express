@@ -15,7 +15,7 @@ class BoardRepository extends BaseMysqlRepository implements BoardRepositoryInte
 
   public async createBoard<T>(request: RequestCreateBoard, connection?: any): Promise<T> {
     const queryInfo: QueryInfo = BoardQuery(BoardQueryId.createBoard, request);
-    return await this.insertByObj(queryInfo.query, queryInfo.queryParams, connection);
+    return await this.insertByObj<T>(queryInfo.query, queryInfo.queryParams, connection);
   }
 
   public async getBaord<T>(request: number, connection?: any): Promise<T> {

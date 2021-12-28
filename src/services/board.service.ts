@@ -17,9 +17,15 @@ class BoardService {
 
     try {
       connection = await this.mysqlPool.getConnection();
+      connection.beginTransaction();
+
       result = await this.repository.createBoard(request, connection);
+      if (connection) connection.commit();
     } catch (error) {
+      if (connection) connection.rollback();
       throw error;
+    } finally {
+      if (connection) connection.release();
     }
 
     return result;
